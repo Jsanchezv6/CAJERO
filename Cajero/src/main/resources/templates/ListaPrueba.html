@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabla de Cuentas</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Tabla de Cuentas</h2>
+
+<table id="cuentaTable">
+    <thead>
+    <tr>
+        <th>Cuenta</th>
+        <th>Saldo</th>
+        <th>ID Usuario</th>
+        <th>Teléfono</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Aquí se llenarán los datos de la tabla -->
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function(){
+        $.ajax({
+            url: 'http://localhost:9000/api/v1/cuenta/list',
+            type: 'GET',
+            success: function(data){
+                var table = $('#cuentaTable tbody');
+                table.empty(); // Limpiar la tabla antes de agregar nuevos datos
+                $.each(data, function(index, cuenta){
+                    table.append('<tr>' +
+                        '<td>' + cuenta.cuenta + '</td>' +
+                        '<td>' + cuenta.saldo + '</td>' +
+                        '<td>' + cuenta.idUsuario + '</td>' +
+                        '<td>' + cuenta.telefono + '</td>' +
+                        '</tr>');
+                });
+            },
+            error: function(xhr, status, error){
+                console.error('Error al obtener los datos:', status, error);
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
