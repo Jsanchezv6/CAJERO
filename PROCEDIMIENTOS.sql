@@ -60,21 +60,21 @@ GO
 
 
 
-
-
-
 --RETIRO
+
+
 ALTER PROCEDURE [dbo].[sp_Retiro]
 (
     @cuenta VARCHAR(25),
+    @pin VARCHAR(4), 
     @monto DECIMAL(12, 2)
 )
 AS
 BEGIN
-
     DECLARE @Intentos INT = 0;
     DECLARE @FechaHora DATETIME = GETDATE();
     DECLARE @Dead INT = 1205;
+
     WHILE @Intentos < 3
     BEGIN
         SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
@@ -84,6 +84,12 @@ BEGIN
             IF NOT EXISTS (SELECT 1 FROM Cuenta WHERE cuenta = @cuenta)
             BEGIN
                 THROW 50001, 'La cuenta no existe.', 1;
+            END
+
+            -- Validar PIN
+            IF NOT EXISTS (SELECT 1 FROM Usuario u INNER JOIN Cuenta c ON u.idUsuario = c.idUsuario WHERE c.cuenta = @cuenta AND u.pin = @pin)
+            BEGIN
+                THROW 50006, 'PIN incorrecto.', 1;
             END
 
             -- Validar saldo
@@ -105,12 +111,12 @@ BEGIN
 
             IF @billetes100 > (SELECT cantidad FROM Cajero WHERE id = 1)
             BEGIN
-                THROW 50003, 'No hay suficientes billetes de $100.', 1;
+                THROW 50003, 'No hay suficientes billetes de Q100.', 1;
             END
 
             IF @billetes50 > (SELECT cantidad FROM Cajero WHERE id = 2)
             BEGIN
-                THROW 50004, 'No hay suficientes billetes de $50.', 1;
+                THROW 50004, 'No hay suficientes billetes de Q50.', 1;
             END
 
             -- Actualizar saldo
@@ -153,7 +159,6 @@ BEGIN
         END CATCH
     END; -- Fin del bucle
 END;
-GO
 
 
 
@@ -214,11 +219,11 @@ GO
 
 
 
-
 --TRANSFERENCIA
 ALTER PROCEDURE [dbo].[sp_TransferenciaCuenta]
 (
     @cuentaOrigen VARCHAR(25),
+    @pin VARCHAR(4), -- Agregar parámetro para el PIN de la cuenta origen
     @cuentaDestino VARCHAR(25),
     @monto DECIMAL(12, 2)
 )
@@ -237,6 +242,12 @@ BEGIN
             IF NOT EXISTS (SELECT 1 FROM Cuenta WHERE cuenta = @cuentaOrigen)
             BEGIN
                 THROW 50001, 'La cuenta origen no existe.', 1;
+            END
+
+            -- Validar PIN de la cuenta origen
+            IF NOT EXISTS (SELECT 1 FROM Usuario u INNER JOIN Cuenta c ON u.idUsuario = c.idUsuario WHERE c.cuenta = @cuentaOrigen AND u.pin = @pin)
+            BEGIN
+                THROW 50007, 'PIN incorrecto para la cuenta origen.', 1;
             END
 
             -- Validar cuenta destino
@@ -290,7 +301,7 @@ BEGIN
         END CATCH
     END; -- Fin del bucle
 END;
-GO
+
 
 
 
@@ -301,6 +312,7 @@ GO
 ALTER PROCEDURE [dbo].[sp_TransferenciaCelular]
 (
     @cuentaOrigen VARCHAR(25),
+    @pin VARCHAR(4), -- Agregar parámetro para el PIN de la cuenta origen
     @telefonoDestino VARCHAR(25),
     @monto DECIMAL(12, 2)
 )
@@ -331,6 +343,12 @@ BEGIN
             IF NOT EXISTS (SELECT 1 FROM Cuenta WHERE cuenta = @cuentaOrigen)
             BEGIN
                 THROW 50001, 'La cuenta origen no existe.', 1;
+            END
+
+            -- Validar PIN de la cuenta origen
+            IF NOT EXISTS (SELECT 1 FROM Usuario u INNER JOIN Cuenta c ON u.idUsuario = c.idUsuario WHERE c.cuenta = @cuentaOrigen AND u.pin = @pin)
+            BEGIN
+                THROW 50007, 'PIN incorrecto para la cuenta origen.', 1;
             END
 
             -- Validar saldo en cuenta de origen
@@ -378,7 +396,7 @@ BEGIN
         END CATCH
     END; 
 END;
-GO
+
 
 
 
