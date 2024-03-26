@@ -8,6 +8,8 @@ public class Cajero {
     private Date fecha;
     private String descripcion;
 
+    private int denominacion;
+
     // Constructor vacío
     public Cajero() {
     }
@@ -44,4 +46,13 @@ public class Cajero {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+
+    public int getDenominacion() {
+        return denominacion;
+    }
+
+    public void setDenominacion(int denominacion) {
+        this.denominacion = denominacion;
+    }
+
 }

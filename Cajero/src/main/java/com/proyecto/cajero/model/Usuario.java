@@ -40,3 +40,4 @@ public class Usuario {
         this.rol = rol;
     }
 }
+

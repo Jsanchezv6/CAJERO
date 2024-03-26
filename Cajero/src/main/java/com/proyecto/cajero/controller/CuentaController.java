@@ -1,15 +1,11 @@
 package com.proyecto.cajero.controller;
-
 import com.proyecto.cajero.model.Cuenta;
 import com.proyecto.cajero.model.ServiceResponse;
-import com.proyecto.cajero.service.CuentaService;
 import com.proyecto.cajero.service.ICuentaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-
 import java.util.List;
 
 @RestController

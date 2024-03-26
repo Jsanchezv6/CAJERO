@@ -2,6 +2,7 @@ package com.proyecto.cajero.repository;
 import com.proyecto.cajero.model.Cajero;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -27,15 +28,20 @@ public class CajeroRepository implements ICajeroRepository {
         return jdbcTemplate.update(SQL, cajero.getId(), cajero.getCantidad(), cajero.getFecha(), cajero.getDescripcion());
     }
 
-    @Override
-    public int update(Cajero cajero) {
-        String SQL = "UPDATE Cajero SET cantidad=?, fecha=?, descripcion=? WHERE id=?";
-        return jdbcTemplate.update(SQL, cajero.getCantidad(), cajero.getFecha(), cajero.getDescripcion(), cajero.getId());
-    }
+
 
     @Override
     public int deleteById(int id) {
-        String SQL = "DELETE FROM Cajero WHERE id=?";
-        return jdbcTemplate.update(SQL, id);
+        return 0;
+    }
+
+
+    @Override
+    public int update(Cajero cajero) {
+        String storedProcedure = "EXEC [dbo].[sp_ControlBilletes] ?, ?";
+        return jdbcTemplate.update(storedProcedure, cajero.getDenominacion(), cajero.getCantidad());
     }
 }
+
+
+

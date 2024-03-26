@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabla de Transacciones</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin-top: 40px;
+            background-color: #eeb1b1; /* Color de fondo */
+            color: #333; /* Color del texto */
+        }
+        .container {
+            background-color: #fff; /* Color de fondo del contenedor */
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Sombra */
+        }
+        h2 {
+            text-align: center;
+            color: #555; /* Color del encabezado */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-spacing: 0;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9; /* Color de fondo de las filas pares */
+        }
+        tr:hover {
+            background-color: #e0e0e0; /* Color de fondo al pasar el ratón sobre las filas */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="cajero.html"><button>Volver al Menú Principal</button></a>
+    <h2>Bitacora de Transacciones</h2>
+
+    <table id="transaccionTable">
+        <thead>
+        <tr>
+            <th>ID de Transacción</th>
+            <th>Tipo de Transacción</th>
+            <th>Monto</th>
+            <th>Fecha y Hora</th>
+            <th>Número de Cuenta Origen</th>
+            <th>Número de Cuenta Destino</th>
+            <th>Número de Teléfono Destino</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Aquí se llenarán los datos de la tabla -->
+        </tbody>
+    </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $.ajax({
+            url: 'http://localhost:9000/api/v1/transaccion/list',
+            type: 'GET',
+            success: function(data){
+                var table = $('#transaccionTable tbody');
+                table.empty(); // Limpiar la tabla antes de agregar nuevos datos
+                $.each(data, function(index, transaccion){
+                    table.append('<tr>' +
+                        '<td>' + (transaccion.idTransaccion != null ? transaccion.idTransaccion : 'N/A') + '</td>' +
+                        '<td>' + (transaccion.tipoTransaccion != null ? transaccion.tipoTransaccion : 'N/A') + '</td>' +
+                        '<td>' + (transaccion.monto != null ? transaccion.monto : 'N/A') + '</td>' +
+                        '<td>' + (transaccion.fechahora != null ? transaccion.fechahora : 'N/A') + '</td>' +
+                        '<td>' + (transaccion.numeroCuentaOrigen != null ? transaccion.numeroCuentaOrigen : 'N/A') + '</td>' +
+                        '<td>' + (transaccion.numeroCuentaDestino != null ? transaccion.numeroCuentaDestino : 'N/A') + '</td>' +
+                        '<td>' + (transaccion.numeroTelefonoDestino != null ? transaccion.numeroTelefonoDestino : 'N/A') + '</td>' +
+                        '</tr>');
+                });
+            },
+            error: function(xhr, status, error){
+                console.error('Error al obtener los datos:', status, error);
+            }
+        });
+    });
+</script>
+
+</body>

@@ -14,22 +14,25 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background-color: #f0f0f0;
+            background-image: url('pngtree-blue-tech-banner-background-image_930958.jpg');
+            background-size: cover;
+            background-position: center;
         }
 
         h1 {
             margin-bottom: 20px;
+            color: #fff;
         }
 
         .container {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             grid-gap: 20px;
-            max-width: 800px; /* Ajustado el tamaño del contenedor */
+            max-width: 800px;
             padding: 20px;
             border: 1px solid #ccc;
             border-radius: 10px;
-            background-color: #fff;
+            background-color: rgba(255, 255, 255, 0.8); /* Cambiado el color de fondo con transparencia */
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
@@ -37,23 +40,43 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.2em;
-            padding: 20px;
+            font-size: 1.5em; /* Aumentado el tamaño del texto */
+            padding: 40px; /* Aumentado el tamaño del botón */
             border: none;
-            border-radius: 10px;
+            border-radius: 20px; /* Haciendo los botones más redondeados */
             background-color: #007bff;
             color: #fff;
             text-decoration: none;
             transition: background-color 0.3s ease;
+            cursor: pointer;
         }
 
         .button:hover {
             background-color: #0056b3;
         }
+
+        /* Estilos para el botón de administrador */
+        .admin-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1em;
+            padding: 10px 20px;
+            border-radius: 10px;
+            background-color: #ff9900;
+            color: #fff;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .admin-button:hover {
+            background-color: #e68a00;
+        }
     </style>
 </head>
 <body>
 <h1>Simulador de Cajero Automático</h1>
+<a href="PaginaAdministrador.html" class="admin-button">Opciones de Administrador</a>
 <div class="container">
     <a href="Deposito.html" class="button">Depósito</a>
     <a href="Retiro.html" class="button">Retiro</a>

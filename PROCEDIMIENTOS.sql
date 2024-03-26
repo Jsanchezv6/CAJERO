@@ -408,7 +408,6 @@ ALTER PROCEDURE [dbo].[sp_ReporteComprobacionSaldos]
 )
 AS
 BEGIN
-
     DECLARE @Intentos INT = 0;
     DECLARE @Dead INT = 1205;
 
@@ -421,13 +420,14 @@ BEGIN
             SELECT
                 c.cuenta,
                 c.saldo, -- Saldo actual
-                SUM(CASE WHEN TipoTransaccion IN ('D', 'T+') THEN monto ELSE -monto END) OVER (PARTITION BY c.cuenta) 
-                    AS saldoCalculado 
+                ISNULL(SUM(CASE WHEN t.TipoTransaccion IN ('D', 'T') THEN t.monto ELSE -t.monto END), 0) AS saldoCalculado
             FROM 
                 Cuenta c
-            JOIN Transaccion t ON c.cuenta = t.NumeroCuentaOrigen OR c.cuenta = t.NumeroCuentaDestino
-            WHERE
-                CAST(t.fechahora AS DATE) = @fecha 
+            LEFT JOIN Transaccion t ON c.cuenta = t.NumeroCuentaOrigen OR c.cuenta = t.NumeroCuentaDestino
+            WHERE 
+                CAST(t.fechahora AS DATE) = @fecha
+            GROUP BY
+                c.cuenta, c.saldo
 
             -- Confirmar transacción
             COMMIT;
@@ -452,4 +452,3 @@ BEGIN
         END CATCH
     END; 
 END;
-GO

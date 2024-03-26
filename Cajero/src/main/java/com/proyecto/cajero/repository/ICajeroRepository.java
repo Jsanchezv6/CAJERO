@@ -14,4 +14,5 @@ public interface ICajeroRepository {
     int save(Cajero cajero);
     int update(Cajero cajero);
     int deleteById(int id);
+
 }

@@ -12,7 +12,7 @@ public class Transaccion {
     LocalDateTime fechahora;
     String numeroCuentaOrigen;
     String numeroCuentaDestino;
-    int numeroTelefonoDestino;
+    String numeroTelefonoDestino;
 
 
 }
